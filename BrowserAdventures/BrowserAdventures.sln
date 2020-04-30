@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserAdventures", "..\..\..\source\repos\BrowserAdventures\BrowserAdventures.csproj", "{CA2E13DA-4E9B-43B3-B6DE-B4BBFAF20B9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrowserAdventures", "BrowserAdventures.csproj", "{CA2E13DA-4E9B-43B3-B6DE-B4BBFAF20B9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
