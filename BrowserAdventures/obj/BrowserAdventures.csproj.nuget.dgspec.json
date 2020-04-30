@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Joeyk\\source\\repos\\BrowserAdventures\\BrowserAdventures.csproj": {}
+    "C:\\Users\\Joeyk\\Desktop\\MVCGame\\BrowserAdventures\\BrowserAdventures\\BrowserAdventures.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Joeyk\\source\\repos\\BrowserAdventures\\BrowserAdventures.csproj": {
+    "C:\\Users\\Joeyk\\Desktop\\MVCGame\\BrowserAdventures\\BrowserAdventures\\BrowserAdventures.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Joeyk\\source\\repos\\BrowserAdventures\\BrowserAdventures.csproj",
+        "projectUniqueName": "C:\\Users\\Joeyk\\Desktop\\MVCGame\\BrowserAdventures\\BrowserAdventures\\BrowserAdventures.csproj",
         "projectName": "BrowserAdventures",
-        "projectPath": "C:\\Users\\Joeyk\\source\\repos\\BrowserAdventures\\BrowserAdventures.csproj",
+        "projectPath": "C:\\Users\\Joeyk\\Desktop\\MVCGame\\BrowserAdventures\\BrowserAdventures\\BrowserAdventures.csproj",
         "packagesPath": "C:\\Users\\Joeyk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Joeyk\\source\\repos\\BrowserAdventures\\obj\\",
+        "outputPath": "C:\\Users\\Joeyk\\Desktop\\MVCGame\\BrowserAdventures\\BrowserAdventures\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Joeyk\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -37,6 +37,26 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.2, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[3.1.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
