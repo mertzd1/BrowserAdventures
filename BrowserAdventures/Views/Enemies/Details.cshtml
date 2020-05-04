@@ -1,0 +1,60 @@
+﻿@model BrowserAdventures.Models.Enemy
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Enemy</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyDescription)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyDescription)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyHealth)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyHealth)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyMultipler)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyMultipler)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyDie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyDie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyModifier)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyModifier)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnemyExperience)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnemyExperience)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.EnemyID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

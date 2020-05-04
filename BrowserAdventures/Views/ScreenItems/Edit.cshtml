@@ -1,0 +1,49 @@
+﻿@model BrowserAdventures.Models.ScreenItem
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ScreenItem</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ScreenItemID" />
+            <div class="form-group">
+                <label asp-for="ScreenID" class="control-label"></label>
+                <input asp-for="ScreenID" class="form-control" />
+                <span asp-validation-for="ScreenID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScreenItemDescription" class="control-label"></label>
+                <input asp-for="ScreenItemDescription" class="form-control" />
+                <span asp-validation-for="ScreenItemDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScreenItemTakenDescription" class="control-label"></label>
+                <input asp-for="ScreenItemTakenDescription" class="form-control" />
+                <span asp-validation-for="ScreenItemTakenDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScreenItemAction" class="control-label"></label>
+                <input asp-for="ScreenItemAction" class="form-control" />
+                <span asp-validation-for="ScreenItemAction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
