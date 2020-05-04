@@ -10,5 +10,7 @@ namespace BrowserAdventures.Models
         public User User { get; set; }
         public List<FightLog> Log { get; set; }
         public Screen Screen { get; set; }
+
+        public List<AccessPoint> AccessPoints { get; set; }
     }
 }

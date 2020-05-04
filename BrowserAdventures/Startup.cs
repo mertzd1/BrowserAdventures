@@ -29,6 +29,9 @@ namespace BrowserAdventures
 
             services.AddDbContext<BrowserAdventureContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("net")));
+
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +49,7 @@ namespace BrowserAdventures
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

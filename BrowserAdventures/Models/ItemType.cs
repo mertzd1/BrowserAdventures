@@ -9,5 +9,7 @@ namespace BrowserAdventures.Models
     {
         public int ItemTypeID { get; set; }
         public string ItemTypeName { get; set; }
+
+        public bool Container { get; set; }
     }
 }

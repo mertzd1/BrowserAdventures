@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using BrowserAdventures.Models;
 using BrowserAdventures;
 using browsersqlserver.database.windows;
+using Microsoft.EntityFrameworkCore;
+using BrowserAdventures.Infrastructure;
 
 namespace BrowserAdventures.Controllers
 {
@@ -52,11 +54,71 @@ namespace BrowserAdventures.Controllers
                 verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
                 _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world." });
                 _context.SaveChanges();
+                
             }
+            UpdateScreen(verifiedUser);
+            SaveUser(verifiedUser);
             ConsoleViewModel model = new ConsoleViewModel { User = verifiedUser,
                                                             Log = _context.FightLogs.Where(l => l.UserID == verifiedUser.UserID).ToList(),
-                                                            Screen = _context.Screen.Where(s => s.ScreenID == verifiedUser.Screen).FirstOrDefault()};
+                                                            AccessPoints = _context.AccessPoint.Where(a => a.From == verifiedUser.Screen).ToList()};
+            
             return View("Console", model);
+        }
+
+        public void UpdateScreen(User user)
+        {
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            string roomDesc = screen.ScreenDescription;
+            foreach (ScreenItem item in screen.ScreenInventory)
+            {
+                roomDesc += " " + item.ScreenItemDescription;
+            }
+            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = roomDesc });
+            _context.SaveChanges();
+        }
+
+        public IActionResult Travel(int screenID)
+        {
+            User user = GetUser();
+            // Update the screen the user is currently at
+            user.Screen = screenID;
+            UpdateScreen(user);
+            SaveUser(user);
+            _context.User.Update(user);
+            _context.SaveChanges();
+            ConsoleViewModel model = new ConsoleViewModel();
+            model.User = user;
+            model.Log = _context.FightLogs.Where(l => l.UserID == user.UserID).ToList();
+            model.AccessPoints = _context.AccessPoint.Where(a => a.From == user.Screen).ToList();
+
+
+            return View("Console", model);
+        }
+
+        public IActionResult Open(int itemID)
+        {
+            return View("Console");
+        }
+
+        public IActionResult Close(int itemID)
+        {
+            return View("Console");
+        }
+
+        public IActionResult Take(int itemID)
+        {
+            return View("Console");
+        }
+
+        private void SaveUser(User user)
+        {
+            HttpContext.Session.SetJson("User", user);
+        }
+
+        private User GetUser()
+        {
+            User user = HttpContext.Session.GetJson<User>("User") ?? new User();
+            return user;
         }
     }
 }

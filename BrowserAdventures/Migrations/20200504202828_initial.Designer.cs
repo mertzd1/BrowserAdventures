@@ -9,7 +9,7 @@ using browsersqlserver.database.windows;
 namespace BrowserAdventures.Migrations
 {
     [DbContext(typeof(BrowserAdventureContext))]
-    [Migration("20200504154222_initial")]
+    [Migration("20200504202828_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,9 @@ namespace BrowserAdventures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Container")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ItemTypeName")
                         .HasColumnType("nvarchar(max)");

@@ -6,16 +6,18 @@
 <h1>Console</h1>
 
 Hi, @Model.User.Name
-<div class="log-events mt-4">
-    <br />
-    @foreach (FightLog entry in Model.Log)
-    {
-        @entry.Entry
-        <br />
-    }
+<div class="console-container">
+    <div class="log-events d-flex flex-column">
+        @foreach (FightLog entry in Model.Log)
+        {
+            <span class="mt-2">@entry.Entry</span>
+        }
+    </div>
+    <div class="screen-options mt-2">
+        @foreach (AccessPoint p in Model.AccessPoints)
+        {
+            @Html.ActionLink(p.Description, "Travel", new { screenID = p.To })
+        }
+    </div>
 </div>
-<div class="screen-description mt-2">
-    @Model.Screen.ScreenDescription
-</div>
-
 

@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ScreenID)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ScreenName)
             </th>
             <th>
@@ -24,6 +27,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScreenID)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ScreenName)
             </td>

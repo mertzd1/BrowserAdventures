@@ -24,6 +24,51 @@ a {
   border-color: #1861ac;
 }
 
+
+/* Custom css */
+@font-face {
+    font-family: "Gothic";
+    src: url("../lib/fonts/InkedBones.ttf") format('truetype');
+}
+@font-face {
+    font-family: "Olde";
+    src: url("../lib/fonts/OldLondon.ttf") format('truetype');
+}
+
+.olde-font {
+    font-family: Olde, Verdana;
+}
+
+input {
+    outline: none;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+    font-size: 2em;
+    width: 50%;
+    margin: 80px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 30px;
+}
+
+.console-container {
+    width: 80%;
+    padding: 50px;
+    font-family: "Olde", Verdana;
+    font-size: 2em;
+    background-color: rgba(255,255,255,.3);
+    border-radius: 50px;
+}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -61,6 +106,7 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-image: url("../img/scrollBackground.png");
 }
 .footer {
   position: absolute;

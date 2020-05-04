@@ -121,7 +121,8 @@ namespace BrowserAdventures.Migrations
                 {
                     ItemTypeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemTypeName = table.Column<string>(nullable: true)
+                    ItemTypeName = table.Column<string>(nullable: true),
+                    Container = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

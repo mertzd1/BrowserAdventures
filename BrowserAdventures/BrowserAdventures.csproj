@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200504143147_initial.cs" />
     <Compile Remove="Migrations\20200504143147_initial.Designer.cs" />
+    <Compile Remove="Migrations\20200504154222_initial.cs" />
+    <Compile Remove="Migrations\20200504154222_initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,10 +19,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\Pictures\" />
   </ItemGroup>
 
 

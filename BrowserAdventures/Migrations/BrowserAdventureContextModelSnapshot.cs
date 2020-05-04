@@ -184,6 +184,9 @@ namespace BrowserAdventures.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("Container")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ItemTypeName")
                         .HasColumnType("nvarchar(max)");
 

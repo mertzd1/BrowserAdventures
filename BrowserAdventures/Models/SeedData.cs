@@ -21,9 +21,29 @@ namespace BrowserAdventures.Models
                     context.Screen.AddRange(
                         new Screen
                         {
-                            ScreenID = 1,
+                            //ScreenID = 1,
                             ScreenName = "A fork in the road",
-                            ScreenDescription = "You stand at the end of a wide road which continues to the west. The barren wilderness from whence you came lies to the east and south. To the north you see a broad field surrounded by a tall fence and accessible only through a gate. A small chest sits on the ground by the fence. "
+                            ScreenDescription = "You stand at the end of a wide road which continues to the west. The barren wilderness from whence you came lies to the east and south. To the north you see a broad field surrounded by a tall fence and accessible only through a gate."
+                        },
+                        new Screen
+                        {
+                            //ScreenID = 2,
+                            ScreenName = "A broad field",
+                            ScreenDescription = "You stand in a broad field, freshly tilled but devoid of crops. The only exit lies south and leads to the end of a wide road."
+                        }
+                        );
+                }
+
+                // Access Point
+                if (!context.AccessPoint.Any())
+                {
+                    context.AccessPoint.AddRange(
+                        new AccessPoint
+                        {
+                            //AccessPointID = 1,
+                            To = 2,
+                            From = 1,
+                            Description = "Enter the field"
                         }
                         );
                 }
@@ -33,7 +53,7 @@ namespace BrowserAdventures.Models
                     context.ItemType.AddRange(
                         new ItemType
                         {
-                            ItemTypeID = 1,
+                            //ItemTypeID = 1,
                             ItemTypeName = "Chest"
                         }
                         );
@@ -44,7 +64,7 @@ namespace BrowserAdventures.Models
                     context.Item.AddRange(
                         new Item
                         {
-                            ItemID = 1,
+                            //ItemID = 1,
                             ItemTypeID = 1,
                             ItemName = "A small chest"
                         }
@@ -57,7 +77,7 @@ namespace BrowserAdventures.Models
                     context.ScreenItem.AddRange(
                         new ScreenItem
                         {
-                            ScreenItemID = 1,
+                            //ScreenItemID = 1,
                             ScreenID = 1,
                             ItemID = 1,
                             ScreenItemDescription = "A small chest sits on the ground by the fence."
