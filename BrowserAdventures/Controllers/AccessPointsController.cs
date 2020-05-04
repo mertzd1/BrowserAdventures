@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class ItemTypesController : Controller
+    public class AccessPointsController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public ItemTypesController(net context)
+        public AccessPointsController(BrowserAdventureContext context)             
         {
             _context = context;
         }
 
-        // GET: ItemTypes
+        // GET: AccessPoints
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ItemType.ToListAsync());
+            return View(await _context.AccessPoint.ToListAsync());
         }
 
-        // GET: ItemTypes/Details/5
+        // GET: AccessPoints/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var itemType = await _context.ItemType
-                .FirstOrDefaultAsync(m => m.ItemTypeID == id);
-            if (itemType == null)
+            var accessPoint = await _context.AccessPoint
+                .FirstOrDefaultAsync(m => m.AccessPointID == id);
+            if (accessPoint == null)
             {
                 return NotFound();
             }
 
-            return View(itemType);
+            return View(accessPoint);
         }
 
-        // GET: ItemTypes/Create
+        // GET: AccessPoints/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ItemTypes/Create
+        // POST: AccessPoints/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ItemTypeID,ItemTypeName")] ItemType itemType)
+        public async Task<IActionResult> Create([Bind("AccessPointID,From,To,Description")] AccessPoint accessPoint)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(itemType);
+                _context.Add(accessPoint);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(itemType);
+            return View(accessPoint);
         }
 
-        // GET: ItemTypes/Edit/5
+        // GET: AccessPoints/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var itemType = await _context.ItemType.FindAsync(id);
-            if (itemType == null)
+            var accessPoint = await _context.AccessPoint.FindAsync(id);
+            if (accessPoint == null)
             {
                 return NotFound();
             }
-            return View(itemType);
+            return View(accessPoint);
         }
 
-        // POST: ItemTypes/Edit/5
+        // POST: AccessPoints/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ItemTypeID,ItemTypeName")] ItemType itemType)
+        public async Task<IActionResult> Edit(int id, [Bind("AccessPointID,From,To,Description")] AccessPoint accessPoint)
         {
-            if (id != itemType.ItemTypeID)
+            if (id != accessPoint.AccessPointID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(itemType);
+                    _context.Update(accessPoint);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemTypeExists(itemType.ItemTypeID))
+                    if (!AccessPointExists(accessPoint.AccessPointID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(itemType);
+            return View(accessPoint);
         }
 
-        // GET: ItemTypes/Delete/5
+        // GET: AccessPoints/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var itemType = await _context.ItemType
-                .FirstOrDefaultAsync(m => m.ItemTypeID == id);
-            if (itemType == null)
+            var accessPoint = await _context.AccessPoint
+                .FirstOrDefaultAsync(m => m.AccessPointID == id);
+            if (accessPoint == null)
             {
                 return NotFound();
             }
 
-            return View(itemType);
+            return View(accessPoint);
         }
 
-        // POST: ItemTypes/Delete/5
+        // POST: AccessPoints/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var itemType = await _context.ItemType.FindAsync(id);
-            _context.ItemType.Remove(itemType);
+            var accessPoint = await _context.AccessPoint.FindAsync(id);
+            _context.AccessPoint.Remove(accessPoint);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ItemTypeExists(int id)
+        private bool AccessPointExists(int id)
         {
-            return _context.ItemType.Any(e => e.ItemTypeID == id);
+            return _context.AccessPoint.Any(e => e.AccessPointID == id);
         }
     }
 }

@@ -11,5 +11,7 @@ namespace BrowserAdventures.Models
         public string ScreenName { get; set; }
         public string ScreenDescription { get; set; }
 
+        public ICollection<ScreenItem> ScreenInventory { get; set; }
+
     }
 }

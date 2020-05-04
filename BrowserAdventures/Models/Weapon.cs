@@ -7,6 +7,7 @@ namespace BrowserAdventures.Models
 {
     public class Weapon
     {
+        public int WeaponID { get; set; }
         public int ItemID { get; set; }
         public int WeaponMultipler { get; set; }
         public int WeaponDie { get; set; } 

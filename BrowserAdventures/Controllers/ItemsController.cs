@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class AccessPointsController : Controller
+    public class ItemsController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public AccessPointsController(net context)             
+        public ItemsController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: AccessPoints
+        // GET: Items
         public async Task<IActionResult> Index()
         {
-            return View(await _context.AccessPoint.ToListAsync());
+            return View(await _context.Item.ToListAsync());
         }
 
-        // GET: AccessPoints/Details/5
+        // GET: Items/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var accessPoint = await _context.AccessPoint
-                .FirstOrDefaultAsync(m => m.AccessPointID == id);
-            if (accessPoint == null)
+            var item = await _context.Item
+                .FirstOrDefaultAsync(m => m.ItemID == id);
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(accessPoint);
+            return View(item);
         }
 
-        // GET: AccessPoints/Create
+        // GET: Items/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: AccessPoints/Create
+        // POST: Items/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AccessPointID,From,To,Description")] AccessPoint accessPoint)
+        public async Task<IActionResult> Create([Bind("ItemID,ItemTypeID,ItemName")] Item item)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(accessPoint);
+                _context.Add(item);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(accessPoint);
+            return View(item);
         }
 
-        // GET: AccessPoints/Edit/5
+        // GET: Items/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var accessPoint = await _context.AccessPoint.FindAsync(id);
-            if (accessPoint == null)
+            var item = await _context.Item.FindAsync(id);
+            if (item == null)
             {
                 return NotFound();
             }
-            return View(accessPoint);
+            return View(item);
         }
 
-        // POST: AccessPoints/Edit/5
+        // POST: Items/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AccessPointID,From,To,Description")] AccessPoint accessPoint)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemID,ItemTypeID,ItemName")] Item item)
         {
-            if (id != accessPoint.AccessPointID)
+            if (id != item.ItemID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(accessPoint);
+                    _context.Update(item);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AccessPointExists(accessPoint.AccessPointID))
+                    if (!ItemExists(item.ItemID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(accessPoint);
+            return View(item);
         }
 
-        // GET: AccessPoints/Delete/5
+        // GET: Items/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var accessPoint = await _context.AccessPoint
-                .FirstOrDefaultAsync(m => m.AccessPointID == id);
-            if (accessPoint == null)
+            var item = await _context.Item
+                .FirstOrDefaultAsync(m => m.ItemID == id);
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(accessPoint);
+            return View(item);
         }
 
-        // POST: AccessPoints/Delete/5
+        // POST: Items/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var accessPoint = await _context.AccessPoint.FindAsync(id);
-            _context.AccessPoint.Remove(accessPoint);
+            var item = await _context.Item.FindAsync(id);
+            _context.Item.Remove(item);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AccessPointExists(int id)
+        private bool ItemExists(int id)
         {
-            return _context.AccessPoint.Any(e => e.AccessPointID == id);
+            return _context.Item.Any(e => e.ItemID == id);
         }
     }
 }

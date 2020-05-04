@@ -7,7 +7,7 @@ namespace BrowserAdventures.Models
 {
     public class AccessRequirements
     {
-        public int AccessRequirementID { get; set; }
+        public int AccessRequirementsID { get; set; }
         
         public int AccessPointID { get; set; }
         public string ClosedMessage { get; set; }

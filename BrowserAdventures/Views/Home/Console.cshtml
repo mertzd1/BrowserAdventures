@@ -1,0 +1,21 @@
+﻿@model ConsoleViewModel
+@{
+    ViewData["Title"] = "Console";
+}
+
+<h1>Console</h1>
+
+Hi, @Model.User.Name
+<div class="log-events mt-4">
+    <br />
+    @foreach (FightLog entry in Model.Log)
+    {
+        @entry.Entry
+        <br />
+    }
+</div>
+<div class="screen-description mt-2">
+    @Model.Screen.ScreenDescription
+</div>
+
+

@@ -27,7 +27,7 @@ namespace BrowserAdventures
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<net>(options =>
+            services.AddDbContext<BrowserAdventureContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("net")));
         }
 

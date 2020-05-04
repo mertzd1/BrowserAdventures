@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class ScreenItemsController : Controller
+    public class UsersController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public ScreenItemsController(net context)
+        public UsersController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: ScreenItems
+        // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ScreenItem.ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
-        // GET: ScreenItems/Details/5
+        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenItem = await _context.ScreenItem
-                .FirstOrDefaultAsync(m => m.ScreenItemID == id);
-            if (screenItem == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(screenItem);
+            return View(user);
         }
 
-        // GET: ScreenItems/Create
+        // GET: Users/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ScreenItems/Create
+        // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScreenItemID,ScreenID,ScreenItemDescription,ScreenItemTakenDescription,ScreenItemAction")] ScreenItem screenItem)
+        public async Task<IActionResult> Create([Bind("UserID,Name,Screen,Level,Experience,Health")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(screenItem);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(screenItem);
+            return View(user);
         }
 
-        // GET: ScreenItems/Edit/5
+        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenItem = await _context.ScreenItem.FindAsync(id);
-            if (screenItem == null)
+            var user = await _context.User.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            return View(screenItem);
+            return View(user);
         }
 
-        // POST: ScreenItems/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScreenItemID,ScreenID,ScreenItemDescription,ScreenItemTakenDescription,ScreenItemAction")] ScreenItem screenItem)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,Name,Screen,Level,Experience,Health")] User user)
         {
-            if (id != screenItem.ScreenItemID)
+            if (id != user.UserID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(screenItem);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScreenItemExists(screenItem.ScreenItemID))
+                    if (!UserExists(user.UserID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(screenItem);
+            return View(user);
         }
 
-        // GET: ScreenItems/Delete/5
+        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenItem = await _context.ScreenItem
-                .FirstOrDefaultAsync(m => m.ScreenItemID == id);
-            if (screenItem == null)
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.UserID == id);
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(screenItem);
+            return View(user);
         }
 
-        // POST: ScreenItems/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var screenItem = await _context.ScreenItem.FindAsync(id);
-            _context.ScreenItem.Remove(screenItem);
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScreenItemExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.ScreenItem.Any(e => e.ScreenItemID == id);
+            return _context.User.Any(e => e.UserID == id);
         }
     }
 }

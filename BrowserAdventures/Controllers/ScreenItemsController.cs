@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class ScreenEnemiesController : Controller
+    public class ScreenItemsController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public ScreenEnemiesController(net context)
+        public ScreenItemsController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: ScreenEnemies
+        // GET: ScreenItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ScreenEnemy.ToListAsync());
+            return View(await _context.ScreenItem.ToListAsync());
         }
 
-        // GET: ScreenEnemies/Details/5
+        // GET: ScreenItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenEnemy = await _context.ScreenEnemy
-                .FirstOrDefaultAsync(m => m.ScreenEnemyID == id);
-            if (screenEnemy == null)
+            var screenItem = await _context.ScreenItem
+                .FirstOrDefaultAsync(m => m.ScreenItemID == id);
+            if (screenItem == null)
             {
                 return NotFound();
             }
 
-            return View(screenEnemy);
+            return View(screenItem);
         }
 
-        // GET: ScreenEnemies/Create
+        // GET: ScreenItems/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ScreenEnemies/Create
+        // POST: ScreenItems/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScreenEnemyID,ScreenID,EnemyID,ScreenEnemyAction")] ScreenEnemy screenEnemy)
+        public async Task<IActionResult> Create([Bind("ScreenItemID,ScreenID,ScreenItemDescription,ScreenItemTakenDescription,ScreenItemAction")] ScreenItem screenItem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(screenEnemy);
+                _context.Add(screenItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(screenEnemy);
+            return View(screenItem);
         }
 
-        // GET: ScreenEnemies/Edit/5
+        // GET: ScreenItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenEnemy = await _context.ScreenEnemy.FindAsync(id);
-            if (screenEnemy == null)
+            var screenItem = await _context.ScreenItem.FindAsync(id);
+            if (screenItem == null)
             {
                 return NotFound();
             }
-            return View(screenEnemy);
+            return View(screenItem);
         }
 
-        // POST: ScreenEnemies/Edit/5
+        // POST: ScreenItems/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScreenEnemyID,ScreenID,EnemyID,ScreenEnemyAction")] ScreenEnemy screenEnemy)
+        public async Task<IActionResult> Edit(int id, [Bind("ScreenItemID,ScreenID,ScreenItemDescription,ScreenItemTakenDescription,ScreenItemAction")] ScreenItem screenItem)
         {
-            if (id != screenEnemy.ScreenEnemyID)
+            if (id != screenItem.ScreenItemID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(screenEnemy);
+                    _context.Update(screenItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScreenEnemyExists(screenEnemy.ScreenEnemyID))
+                    if (!ScreenItemExists(screenItem.ScreenItemID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(screenEnemy);
+            return View(screenItem);
         }
 
-        // GET: ScreenEnemies/Delete/5
+        // GET: ScreenItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screenEnemy = await _context.ScreenEnemy
-                .FirstOrDefaultAsync(m => m.ScreenEnemyID == id);
-            if (screenEnemy == null)
+            var screenItem = await _context.ScreenItem
+                .FirstOrDefaultAsync(m => m.ScreenItemID == id);
+            if (screenItem == null)
             {
                 return NotFound();
             }
 
-            return View(screenEnemy);
+            return View(screenItem);
         }
 
-        // POST: ScreenEnemies/Delete/5
+        // POST: ScreenItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var screenEnemy = await _context.ScreenEnemy.FindAsync(id);
-            _context.ScreenEnemy.Remove(screenEnemy);
+            var screenItem = await _context.ScreenItem.FindAsync(id);
+            _context.ScreenItem.Remove(screenItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScreenEnemyExists(int id)
+        private bool ScreenItemExists(int id)
         {
-            return _context.ScreenEnemy.Any(e => e.ScreenEnemyID == id);
+            return _context.ScreenItem.Any(e => e.ScreenItemID == id);
         }
     }
 }

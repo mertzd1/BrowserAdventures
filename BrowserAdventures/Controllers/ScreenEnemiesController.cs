@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class EnemiesController : Controller
+    public class ScreenEnemiesController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public EnemiesController(net context)
+        public ScreenEnemiesController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: Enemies
+        // GET: ScreenEnemies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Enemy.ToListAsync());
+            return View(await _context.ScreenEnemy.ToListAsync());
         }
 
-        // GET: Enemies/Details/5
+        // GET: ScreenEnemies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var enemy = await _context.Enemy
-                .FirstOrDefaultAsync(m => m.EnemyID == id);
-            if (enemy == null)
+            var screenEnemy = await _context.ScreenEnemy
+                .FirstOrDefaultAsync(m => m.ScreenEnemyID == id);
+            if (screenEnemy == null)
             {
                 return NotFound();
             }
 
-            return View(enemy);
+            return View(screenEnemy);
         }
 
-        // GET: Enemies/Create
+        // GET: ScreenEnemies/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Enemies/Create
+        // POST: ScreenEnemies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EnemyID,EnemyName,EnemyDescription,EnemyHealth,EnemyMultipler,EnemyDie,EnemyModifier,EnemyExperience")] Enemy enemy)
+        public async Task<IActionResult> Create([Bind("ScreenEnemyID,ScreenID,EnemyID,ScreenEnemyAction")] ScreenEnemy screenEnemy)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(enemy);
+                _context.Add(screenEnemy);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(enemy);
+            return View(screenEnemy);
         }
 
-        // GET: Enemies/Edit/5
+        // GET: ScreenEnemies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var enemy = await _context.Enemy.FindAsync(id);
-            if (enemy == null)
+            var screenEnemy = await _context.ScreenEnemy.FindAsync(id);
+            if (screenEnemy == null)
             {
                 return NotFound();
             }
-            return View(enemy);
+            return View(screenEnemy);
         }
 
-        // POST: Enemies/Edit/5
+        // POST: ScreenEnemies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EnemyID,EnemyName,EnemyDescription,EnemyHealth,EnemyMultipler,EnemyDie,EnemyModifier,EnemyExperience")] Enemy enemy)
+        public async Task<IActionResult> Edit(int id, [Bind("ScreenEnemyID,ScreenID,EnemyID,ScreenEnemyAction")] ScreenEnemy screenEnemy)
         {
-            if (id != enemy.EnemyID)
+            if (id != screenEnemy.ScreenEnemyID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(enemy);
+                    _context.Update(screenEnemy);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EnemyExists(enemy.EnemyID))
+                    if (!ScreenEnemyExists(screenEnemy.ScreenEnemyID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(enemy);
+            return View(screenEnemy);
         }
 
-        // GET: Enemies/Delete/5
+        // GET: ScreenEnemies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var enemy = await _context.Enemy
-                .FirstOrDefaultAsync(m => m.EnemyID == id);
-            if (enemy == null)
+            var screenEnemy = await _context.ScreenEnemy
+                .FirstOrDefaultAsync(m => m.ScreenEnemyID == id);
+            if (screenEnemy == null)
             {
                 return NotFound();
             }
 
-            return View(enemy);
+            return View(screenEnemy);
         }
 
-        // POST: Enemies/Delete/5
+        // POST: ScreenEnemies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var enemy = await _context.Enemy.FindAsync(id);
-            _context.Enemy.Remove(enemy);
+            var screenEnemy = await _context.ScreenEnemy.FindAsync(id);
+            _context.ScreenEnemy.Remove(screenEnemy);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EnemyExists(int id)
+        private bool ScreenEnemyExists(int id)
         {
-            return _context.Enemy.Any(e => e.EnemyID == id);
+            return _context.ScreenEnemy.Any(e => e.ScreenEnemyID == id);
         }
     }
 }

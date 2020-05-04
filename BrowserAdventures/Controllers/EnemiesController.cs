@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class UsersController : Controller
+    public class EnemiesController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public UsersController(net context)
+        public EnemiesController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: Enemies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            return View(await _context.Enemy.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: Enemies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var enemy = await _context.Enemy
+                .FirstOrDefaultAsync(m => m.EnemyID == id);
+            if (enemy == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(enemy);
         }
 
-        // GET: Users/Create
+        // GET: Enemies/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Enemies/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Name,Screen,Level,Experience,Health")] User user)
+        public async Task<IActionResult> Create([Bind("EnemyID,EnemyName,EnemyDescription,EnemyHealth,EnemyMultipler,EnemyDie,EnemyModifier,EnemyExperience")] Enemy enemy)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(enemy);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(enemy);
         }
 
-        // GET: Users/Edit/5
+        // GET: Enemies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var enemy = await _context.Enemy.FindAsync(id);
+            if (enemy == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(enemy);
         }
 
-        // POST: Users/Edit/5
+        // POST: Enemies/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Name,Screen,Level,Experience,Health")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("EnemyID,EnemyName,EnemyDescription,EnemyHealth,EnemyMultipler,EnemyDie,EnemyModifier,EnemyExperience")] Enemy enemy)
         {
-            if (id != user.UserID)
+            if (id != enemy.EnemyID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(enemy);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserID))
+                    if (!EnemyExists(enemy.EnemyID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(enemy);
         }
 
-        // GET: Users/Delete/5
+        // GET: Enemies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var user = await _context.User
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var enemy = await _context.Enemy
+                .FirstOrDefaultAsync(m => m.EnemyID == id);
+            if (enemy == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(enemy);
         }
 
-        // POST: Users/Delete/5
+        // POST: Enemies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
-            _context.User.Remove(user);
+            var enemy = await _context.Enemy.FindAsync(id);
+            _context.Enemy.Remove(enemy);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool EnemyExists(int id)
         {
-            return _context.User.Any(e => e.UserID == id);
+            return _context.Enemy.Any(e => e.EnemyID == id);
         }
     }
 }

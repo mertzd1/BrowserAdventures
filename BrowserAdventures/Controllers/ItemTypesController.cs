@@ -10,22 +10,22 @@ using browsersqlserver.database.windows;
 
 namespace BrowserAdventures
 {
-    public class ScreensController : Controller
+    public class ItemTypesController : Controller
     {
-        private readonly net _context;
+        private readonly BrowserAdventureContext _context;
 
-        public ScreensController(net context)
+        public ItemTypesController(BrowserAdventureContext context)
         {
             _context = context;
         }
 
-        // GET: Screens
+        // GET: ItemTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Screen.ToListAsync());
+            return View(await _context.ItemType.ToListAsync());
         }
 
-        // GET: Screens/Details/5
+        // GET: ItemTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screen = await _context.Screen
-                .FirstOrDefaultAsync(m => m.ScreenID == id);
-            if (screen == null)
+            var itemType = await _context.ItemType
+                .FirstOrDefaultAsync(m => m.ItemTypeID == id);
+            if (itemType == null)
             {
                 return NotFound();
             }
 
-            return View(screen);
+            return View(itemType);
         }
 
-        // GET: Screens/Create
+        // GET: ItemTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Screens/Create
+        // POST: ItemTypes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScreenID,ScreenName,ScreenDescription")] Screen screen)
+        public async Task<IActionResult> Create([Bind("ItemTypeID,ItemTypeName")] ItemType itemType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(screen);
+                _context.Add(itemType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(screen);
+            return View(itemType);
         }
 
-        // GET: Screens/Edit/5
+        // GET: ItemTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screen = await _context.Screen.FindAsync(id);
-            if (screen == null)
+            var itemType = await _context.ItemType.FindAsync(id);
+            if (itemType == null)
             {
                 return NotFound();
             }
-            return View(screen);
+            return View(itemType);
         }
 
-        // POST: Screens/Edit/5
+        // POST: ItemTypes/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScreenID,ScreenName,ScreenDescription")] Screen screen)
+        public async Task<IActionResult> Edit(int id, [Bind("ItemTypeID,ItemTypeName")] ItemType itemType)
         {
-            if (id != screen.ScreenID)
+            if (id != itemType.ItemTypeID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace BrowserAdventures
             {
                 try
                 {
-                    _context.Update(screen);
+                    _context.Update(itemType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScreenExists(screen.ScreenID))
+                    if (!ItemTypeExists(itemType.ItemTypeID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace BrowserAdventures
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(screen);
+            return View(itemType);
         }
 
-        // GET: Screens/Delete/5
+        // GET: ItemTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace BrowserAdventures
                 return NotFound();
             }
 
-            var screen = await _context.Screen
-                .FirstOrDefaultAsync(m => m.ScreenID == id);
-            if (screen == null)
+            var itemType = await _context.ItemType
+                .FirstOrDefaultAsync(m => m.ItemTypeID == id);
+            if (itemType == null)
             {
                 return NotFound();
             }
 
-            return View(screen);
+            return View(itemType);
         }
 
-        // POST: Screens/Delete/5
+        // POST: ItemTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var screen = await _context.Screen.FindAsync(id);
-            _context.Screen.Remove(screen);
+            var itemType = await _context.ItemType.FindAsync(id);
+            _context.ItemType.Remove(itemType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScreenExists(int id)
+        private bool ItemTypeExists(int id)
         {
-            return _context.Screen.Any(e => e.ScreenID == id);
+            return _context.ItemType.Any(e => e.ItemTypeID == id);
         }
     }
 }
