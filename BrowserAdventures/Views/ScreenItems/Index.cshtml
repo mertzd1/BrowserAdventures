@@ -1,0 +1,53 @@
+﻿@model IEnumerable<BrowserAdventures.Models.ScreenItem>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ScreenID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScreenItemDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScreenItemTakenDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScreenItemAction)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScreenID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScreenItemDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScreenItemTakenDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScreenItemAction)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ScreenItemID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ScreenItemID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ScreenItemID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
