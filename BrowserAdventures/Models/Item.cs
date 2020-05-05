@@ -11,5 +11,7 @@ namespace BrowserAdventures.Models
         public int ItemTypeID { get; set; }
         public string ItemName { get; set; }
 
+        public bool Container { get; set; }
+        public ICollection<InventoryItem> ContainerInventory { get; set; }
     }
 }

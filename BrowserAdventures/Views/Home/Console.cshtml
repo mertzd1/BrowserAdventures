@@ -6,17 +6,24 @@
 <h1>Console</h1>
 
 Hi, @Model.User.Name
-<div class="console-container">
+<div class="console-container olde-font">
     <div class="log-events d-flex flex-column">
         @foreach (FightLog entry in Model.Log)
         {
             <span class="mt-2">@entry.Entry</span>
         }
     </div>
-    <div class="screen-options mt-2">
+    <div class="screen-options mt-2 d-flex flex-column">
         @foreach (AccessPoint p in Model.AccessPoints)
         {
             @Html.ActionLink(p.Description, "Travel", new { screenID = p.To })
+        }
+        @if (Model.Screen.ScreenInventory != null)
+        {
+            foreach (ScreenItem s in Model.Screen.ScreenInventory)
+            {
+                @Html.ActionLink(s.ScreenItemAction, s.Item.Container ? "Open" : "Take", new { itemID = s.ItemID })
+            }
         }
     </div>
 </div>

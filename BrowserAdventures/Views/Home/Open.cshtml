@@ -1,0 +1,18 @@
+﻿@model ConsoleViewModel
+@{
+    ViewData["Title"] = "Container";
+}
+
+<h1>Console</h1>
+
+<div class="console-container olde-font">
+    <div class="log-events d-flex flex-column">
+        @foreach (FightLog entry in Model.Log)
+        {
+            <span class="mt-2">@entry.Entry</span>
+        }
+    </div>
+    <div class="screen-options mt-2 d-flex flex-column">
+        @(Model.Chest.Item==null ? "The Chest is empty" : Model.Chest.Item.ItemName)
+    </div>
+</div>

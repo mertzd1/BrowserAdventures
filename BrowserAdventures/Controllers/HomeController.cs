@@ -58,8 +58,14 @@ namespace BrowserAdventures.Controllers
             }
             UpdateScreen(verifiedUser);
             SaveUser(verifiedUser);
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == verifiedUser.Screen).FirstOrDefault();
+            foreach (ScreenItem si in screen.ScreenInventory)
+            {
+                si.Item = _context.Item.Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+            }
             ConsoleViewModel model = new ConsoleViewModel { User = verifiedUser,
                                                             Log = _context.FightLogs.Where(l => l.UserID == verifiedUser.UserID).ToList(),
+                                                            Screen = screen,
                                                             AccessPoints = _context.AccessPoint.Where(a => a.From == verifiedUser.Screen).ToList()};
             
             return View("Console", model);
@@ -73,6 +79,7 @@ namespace BrowserAdventures.Controllers
             {
                 roomDesc += " " + item.ScreenItemDescription;
             }
+            // TODO: Add enemy description to room description
             _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = roomDesc });
             _context.SaveChanges();
         }
@@ -86,10 +93,16 @@ namespace BrowserAdventures.Controllers
             SaveUser(user);
             _context.User.Update(user);
             _context.SaveChanges();
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            foreach (ScreenItem si in screen.ScreenInventory)
+            {
+                si.Item = _context.Item.Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+            }
             ConsoleViewModel model = new ConsoleViewModel();
             model.User = user;
             model.Log = _context.FightLogs.Where(l => l.UserID == user.UserID).ToList();
             model.AccessPoints = _context.AccessPoint.Where(a => a.From == user.Screen).ToList();
+            model.Screen = screen;
 
 
             return View("Console", model);
@@ -97,7 +110,28 @@ namespace BrowserAdventures.Controllers
 
         public IActionResult Open(int itemID)
         {
-            return View("Console");
+            // TODO: Actions taken when opening
+            User user = GetUser();
+            FightLog f = new FightLog { UserID = user.UserID, Entry = "Test open action method sat" };
+            _context.FightLogs.Add(f);
+            _context.SaveChanges();
+            ConsoleViewModel model = new ConsoleViewModel();
+            model.User = user;
+            model.Log = _context.FightLogs.Where(l => l.UserID == user.UserID).ToList();
+            model.AccessPoints = _context.AccessPoint.Where(a => a.From == user.Screen).ToList();
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            Chest chest = new Chest();
+            foreach (ScreenItem si in screen.ScreenInventory)
+            {
+                si.Item = _context.Item.Include(i => i.ContainerInventory).Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+                foreach (InventoryItem inv in si.Item.ContainerInventory)
+                {
+                    chest.Item = _context.Item.Where(i => i.ItemID == inv.ItemID).FirstOrDefault();
+                }
+            }
+            model.Screen = screen;
+            model.Chest = chest;
+            return View("Open", model);
         }
 
         public IActionResult Close(int itemID)
@@ -107,6 +141,7 @@ namespace BrowserAdventures.Controllers
 
         public IActionResult Take(int itemID)
         {
+            // TODO: Actions taken when taking
             return View("Console");
         }
 

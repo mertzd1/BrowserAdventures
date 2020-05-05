@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BrowserAdventures.Models
 {
-    public class ItemType
+    public class Chest
     {
-        public int ItemTypeID { get; set; }
-        public string ItemTypeName { get; set; }
-
-        
+        public Item Item { get; set; }
+        public int ItemID { get; set; }
     }
 }

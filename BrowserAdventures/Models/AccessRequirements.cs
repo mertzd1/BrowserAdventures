@@ -13,5 +13,7 @@ namespace BrowserAdventures.Models
         public string ClosedMessage { get; set; }
         public string OpenMessage { get; set; }
 
+        public int RequiredItemID { get; set; }
+
     }
 }

@@ -15,5 +15,7 @@ namespace BrowserAdventures.Models
         public int Experience { get; set; }
         public int Health { get; set; }
 
+        public ICollection<Item> Inventory { get; set; }
+
     }
 }

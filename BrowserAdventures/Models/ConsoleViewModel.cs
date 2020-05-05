@@ -12,5 +12,7 @@ namespace BrowserAdventures.Models
         public Screen Screen { get; set; }
 
         public List<AccessPoint> AccessPoints { get; set; }
+
+        public Chest Chest { get; set; }
     }
 }

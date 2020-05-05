@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using browsersqlserver.database.windows;
@@ -30,6 +31,12 @@ namespace BrowserAdventures.Models
                             //ScreenID = 2,
                             ScreenName = "A broad field",
                             ScreenDescription = "You stand in a broad field, freshly tilled but devoid of crops. The only exit lies south and leads to the end of a wide road."
+                        },
+                        new Screen
+                        {
+                            // ScreenID = 3,
+                            ScreenName = "A wide road",
+                            ScreenDescription = "You stand on a wide road which continues as far as you can see to the west. The road ends a short way east."
                         }
                         );
                 }
@@ -44,6 +51,13 @@ namespace BrowserAdventures.Models
                             To = 2,
                             From = 1,
                             Description = "Enter the field"
+                        },
+                        new AccessPoint
+                        {
+                            // AccessPointID = 2,
+                            To = 1,
+                            From = 2,
+                            Description = "Leave the field"
                         }
                         );
                 }
@@ -55,9 +69,15 @@ namespace BrowserAdventures.Models
                         {
                             //ItemTypeID = 1,
                             ItemTypeName = "Chest"
+                        },
+                        new ItemType
+                        {
+                            // ItemTypeID = 2,
+                            ItemTypeName = "Key"
                         }
                         );
                 }
+                context.SaveChanges();
                 // Items
                 if (!context.Item.Any())
                 {
@@ -66,11 +86,20 @@ namespace BrowserAdventures.Models
                         {
                             //ItemID = 1,
                             ItemTypeID = 1,
-                            ItemName = "A small chest"
+                            ItemName = "A small chest",
+                            Container = true
+                        },
+                        new Item
+                        {
+                            // ItemID = 2,
+                            ItemTypeID = 2,
+                            ItemName = "Gate Key",
+                            Container = false
                         }
                         );
                     
                 }
+                context.SaveChanges();
                 // Screen Items
                 if (!context.ScreenItem.Any())
                 {
@@ -80,7 +109,21 @@ namespace BrowserAdventures.Models
                             //ScreenItemID = 1,
                             ScreenID = 1,
                             ItemID = 1,
-                            ScreenItemDescription = "A small chest sits on the ground by the fence."
+                            ScreenItemDescription = "A small chest sits on the ground by the fence.",
+                            ScreenItemAction = "Open the chest"
+                        }
+                        );
+                }
+                context.SaveChanges();
+                //InventoryItems
+               if (!context.InventoryItems.Any())
+                {
+                    context.InventoryItems.AddRange(
+                        new InventoryItem
+                        {
+                            //InventoryItemID = 1,
+                            ItemID = 2,
+                            ScreenItemID = 1
                         }
                         );
                 }

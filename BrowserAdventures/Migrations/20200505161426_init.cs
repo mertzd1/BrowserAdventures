@@ -2,7 +2,7 @@
 
 namespace BrowserAdventures.Migrations
 {
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,7 +29,8 @@ namespace BrowserAdventures.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccessPointID = table.Column<int>(nullable: false),
                     ClosedMessage = table.Column<string>(nullable: true),
-                    OpenMessage = table.Column<string>(nullable: true)
+                    OpenMessage = table.Column<string>(nullable: true),
+                    RequiredItemID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,43 +87,12 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InventoryItems",
-                columns: table => new
-                {
-                    InventoryItemID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false),
-                    ItemID = table.Column<int>(nullable: false),
-                    ScreenItemID = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Item",
-                columns: table => new
-                {
-                    ItemID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemTypeID = table.Column<int>(nullable: false),
-                    ItemName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Item", x => x.ItemID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ItemType",
                 columns: table => new
                 {
                     ItemTypeID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemTypeName = table.Column<string>(nullable: true),
-                    Container = table.Column<bool>(nullable: false)
+                    ItemTypeName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -192,6 +162,50 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Item",
+                columns: table => new
+                {
+                    ItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemTypeID = table.Column<int>(nullable: false),
+                    ItemName = table.Column<string>(nullable: true),
+                    Container = table.Column<bool>(nullable: false),
+                    UserID = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Item", x => x.ItemID);
+                    table.ForeignKey(
+                        name: "FK_Item_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    InventoryItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(nullable: false),
+                    ItemID = table.Column<int>(nullable: false),
+                    ScreenItemID = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_Item_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Item",
+                        principalColumn: "ItemID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScreenItem",
                 columns: table => new
                 {
@@ -219,6 +233,16 @@ namespace BrowserAdventures.Migrations
                         principalColumn: "ScreenID",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_ItemID",
+                table: "InventoryItems",
+                column: "ItemID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Item_UserID",
+                table: "Item",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScreenItem_ItemID",
@@ -261,9 +285,6 @@ namespace BrowserAdventures.Migrations
                 name: "ScreenItem");
 
             migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
                 name: "Weapon");
 
             migrationBuilder.DropTable(
@@ -271,6 +292,9 @@ namespace BrowserAdventures.Migrations
 
             migrationBuilder.DropTable(
                 name: "Screen");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
