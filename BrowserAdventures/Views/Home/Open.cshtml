@@ -10,9 +10,20 @@
         @foreach (FightLog entry in Model.Log)
         {
             <span class="mt-2">@entry.Entry</span>
+            <span class="mt-2 text-center font-weight-bold">. . .</span>
         }
     </div>
     <div class="screen-options mt-2 d-flex flex-column">
-        @(Model.Chest.Item==null ? "The Chest is empty" : Model.Chest.Item.ItemName)
+        @if(Model.Chest.ItemsInside != null) { 
+        @foreach (KeyValuePair<int, Item> item in Model.Chest.ItemsInside)
+        {
+            @Html.ActionLink($"Take the {item.Value.ItemName}", "Take", new { inventoryItemID = item.Key, takenItemID = item.Value.ItemID, chestID = Model.Chest.ParentContainer.ItemID})
+        }
+        }
+        @Html.ActionLink($"Close the {Model.Chest.ParentContainer.ItemName}", "Close", Model)
     </div>
 </div>
+
+<script>
+window.scrollTo(0, document.body.clientHeight);
+</script>

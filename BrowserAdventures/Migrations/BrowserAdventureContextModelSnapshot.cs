@@ -160,8 +160,6 @@ namespace BrowserAdventures.Migrations
 
                     b.HasKey("InventoryItemID");
 
-                    b.HasIndex("ItemID");
-
                     b.ToTable("InventoryItems");
                 });
 
@@ -174,6 +172,9 @@ namespace BrowserAdventures.Migrations
 
                     b.Property<bool>("Container")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ItemDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ItemName")
                         .HasColumnType("nvarchar(max)");
@@ -325,15 +326,6 @@ namespace BrowserAdventures.Migrations
                     b.HasKey("WeaponID");
 
                     b.ToTable("Weapon");
-                });
-
-            modelBuilder.Entity("BrowserAdventures.Models.InventoryItem", b =>
-                {
-                    b.HasOne("BrowserAdventures.Models.Item", null)
-                        .WithMany("ContainerInventory")
-                        .HasForeignKey("ItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BrowserAdventures.Models.Item", b =>

@@ -81,29 +81,34 @@ namespace BrowserAdventures.Models
                 // Items
                 if (!context.Item.Any())
                 {
-                    context.Item.AddRange(
+                    context.Item.Add(
                         new Item
                         {
                             //ItemID = 1,
                             ItemTypeID = 1,
                             ItemName = "A small chest",
+                            ItemDescription = "A small chest sits on the ground by the fence.",
                             Container = true
-                        },
+                        });
+                    context.SaveChanges();
+                    context.Item.Add(
                         new Item
                         {
-                            // ItemID = 2,
+                            //ItemID = 2,
                             ItemTypeID = 2,
                             ItemName = "Gate Key",
+                            ItemDescription = "A key sits at the bottom of the chest. It looks like it might fit a gate.",
                             Container = false
                         }
                         );
-                    
+                    context.SaveChanges();
+
                 }
-                context.SaveChanges();
+                
                 // Screen Items
                 if (!context.ScreenItem.Any())
                 {
-                    context.ScreenItem.AddRange(
+                    context.ScreenItem.Add(
                         new ScreenItem
                         {
                             //ScreenItemID = 1,
@@ -113,8 +118,12 @@ namespace BrowserAdventures.Models
                             ScreenItemAction = "Open the chest"
                         }
                         );
+                    context.SaveChanges();
+                    
                 }
-                context.SaveChanges();
+                
+
+                
                 //InventoryItems
                if (!context.InventoryItems.Any())
                 {
@@ -127,6 +136,7 @@ namespace BrowserAdventures.Models
                         }
                         );
                 }
+                
                 context.SaveChanges();
             }
         }

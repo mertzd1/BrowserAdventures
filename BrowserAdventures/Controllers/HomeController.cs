@@ -58,6 +58,8 @@ namespace BrowserAdventures.Controllers
             }
             UpdateScreen(verifiedUser);
             SaveUser(verifiedUser);
+
+            /*
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == verifiedUser.Screen).FirstOrDefault();
             foreach (ScreenItem si in screen.ScreenInventory)
             {
@@ -67,8 +69,9 @@ namespace BrowserAdventures.Controllers
                                                             Log = _context.FightLogs.Where(l => l.UserID == verifiedUser.UserID).ToList(),
                                                             Screen = screen,
                                                             AccessPoints = _context.AccessPoint.Where(a => a.From == verifiedUser.Screen).ToList()};
-            
-            return View("Console", model);
+            */
+
+            return View("Console", BuildModel());
         }
 
         public void UpdateScreen(User user)
@@ -93,6 +96,7 @@ namespace BrowserAdventures.Controllers
             SaveUser(user);
             _context.User.Update(user);
             _context.SaveChanges();
+
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
             foreach (ScreenItem si in screen.ScreenInventory)
             {
@@ -105,44 +109,135 @@ namespace BrowserAdventures.Controllers
             model.Screen = screen;
 
 
-            return View("Console", model);
+            return View("Console", BuildModel());
         }
 
         public IActionResult Open(int itemID)
         {
             // TODO: Actions taken when opening
+
+            /*
+            Item item = _context.Item.Where(i => i.ItemID == itemID).FirstOrDefault();
+            ItemType type = _context.ItemType.Where(i => i.ItemTypeID == item.ItemTypeID).FirstOrDefault();
             User user = GetUser();
-            FightLog f = new FightLog { UserID = user.UserID, Entry = "Test open action method sat" };
-            _context.FightLogs.Add(f);
-            _context.SaveChanges();
-            ConsoleViewModel model = new ConsoleViewModel();
-            model.User = user;
-            model.Log = _context.FightLogs.Where(l => l.UserID == user.UserID).ToList();
-            model.AccessPoints = _context.AccessPoint.Where(a => a.From == user.Screen).ToList();
+            
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
             Chest chest = new Chest();
             foreach (ScreenItem si in screen.ScreenInventory)
             {
-                si.Item = _context.Item.Include(i => i.ContainerInventory).Where(i => i.ItemID == si.ItemID).FirstOrDefault();
-                foreach (InventoryItem inv in si.Item.ContainerInventory)
+                si.Item = _context.Item.Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+                chest.ParentContainer = si.Item;
+                List<InventoryItem> items = _context.InventoryItems.Where(i => i.ScreenItemID == si.ScreenItemID).ToList();
+                foreach (InventoryItem inv in items)
                 {
-                    chest.Item = _context.Item.Where(i => i.ItemID == inv.ItemID).FirstOrDefault();
+                    chest.ItemsInside.Add(inv.InventoryItemID, _context.Item.Where(i => i.ItemID == inv.ItemID).FirstOrDefault());
                 }
             }
-            model.Screen = screen;
-            model.Chest = chest;
-            return View("Open", model);
+
+            string openDesc = $"You open the {type.ItemTypeName} and look in.";
+            if (chest.ItemsInside == null)
+            {
+                openDesc += " You don't see anything.";
+            } else
+            {
+                foreach (KeyValuePair<int, Item> chestItem in chest.ItemsInside)
+                {
+                    openDesc += " " + chestItem.Value.ItemDescription;
+                }
+            }
+            // TODO: Append items in container to description
+            FightLog f = new FightLog { UserID = user.UserID, Entry = openDesc };
+            _context.FightLogs.Add(f);
+            _context.SaveChanges();
+            */
+            BuildOpenViewDescription(itemID);
+            return View("Open", BuildModel());
         }
 
-        public IActionResult Close(int itemID)
+        public IActionResult Close(ConsoleViewModel model)
         {
-            return View("Console");
+            UpdateScreen(GetUser());
+            return View("Console", BuildModel());
         }
 
-        public IActionResult Take(int itemID)
+        public IActionResult Take(int inventoryItemID, int takenItemID, int chestID)
         {
             // TODO: Actions taken when taking
-            return View("Console");
+            User user = GetUser();
+            Item takenItem = _context.Item.Where(i => i.ItemID == takenItemID).FirstOrDefault();
+            InventoryItem inv = new InventoryItem();
+            inv.InventoryItemID = inventoryItemID;
+            inv.ItemID = takenItemID;
+            inv.UserID = user.UserID;
+            inv.Quantity = 1;
+            _context.InventoryItems.Update(inv);
+            FightLog f = new FightLog { UserID = user.UserID, Entry = $"You added the {takenItem.ItemName} to your inventory." };
+            _context.FightLogs.Add(f);
+            _context.SaveChanges();
+            BuildOpenViewDescription(chestID);
+            
+            return View("Open", BuildModel());
+        }
+
+        public ConsoleViewModel BuildModel()
+        {
+            User user = GetUser();
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            Chest chest = new Chest();
+            foreach (ScreenItem si in screen.ScreenInventory)
+            {
+                si.Item = _context.Item.Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+                chest.ParentContainer = si.Item;
+                List<InventoryItem> items = _context.InventoryItems.Where(i => i.ScreenItemID == si.ScreenItemID).ToList();
+                foreach (InventoryItem inv in items)
+                {
+                    chest.ItemsInside.Add(inv.InventoryItemID, _context.Item.Where(i => i.ItemID == inv.ItemID).FirstOrDefault());
+                }
+            }
+            ConsoleViewModel model = new ConsoleViewModel();
+            model.User = user;
+            model.Log = _context.FightLogs.Where(l => l.UserID == user.UserID).ToList();
+            model.AccessPoints = _context.AccessPoint.Where(a => a.From == user.Screen).ToList();
+            model.Screen = screen;
+            model.Chest = chest;
+            return model;
+        }
+
+        public void BuildOpenViewDescription(int itemID)
+        {
+            Item item = _context.Item.Where(i => i.ItemID == itemID).FirstOrDefault();
+            ItemType type = _context.ItemType.Where(i => i.ItemTypeID == item.ItemTypeID).FirstOrDefault();
+            User user = GetUser();
+
+            Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            Chest chest = new Chest();
+            foreach (ScreenItem si in screen.ScreenInventory)
+            {
+                si.Item = _context.Item.Where(i => i.ItemID == si.ItemID).FirstOrDefault();
+                chest.ParentContainer = si.Item;
+                List<InventoryItem> items = _context.InventoryItems.Where(i => i.ScreenItemID == si.ScreenItemID).ToList();
+                foreach (InventoryItem inv in items)
+                {
+                    chest.ItemsInside.Add(inv.InventoryItemID, _context.Item.Where(i => i.ItemID == inv.ItemID).FirstOrDefault());
+                }
+            }
+
+            string openDesc = $"You open the {type.ItemTypeName} and look in.";
+            if (chest.ItemsInside == null || chest.ItemsInside.Count == 0)
+            {
+                openDesc += " You don't see anything.";
+            }
+            else
+            {
+                foreach (KeyValuePair<int, Item> chestItem in chest.ItemsInside)
+                {
+                    openDesc += " " + chestItem.Value.ItemDescription;
+                }
+            }
+            // TODO: Append items in container to description
+            FightLog f = new FightLog { UserID = user.UserID, Entry = openDesc };
+            _context.FightLogs.Add(f);
+            _context.SaveChanges();
         }
 
         private void SaveUser(User user)

@@ -87,6 +87,22 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    InventoryItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(nullable: false),
+                    ItemID = table.Column<int>(nullable: false),
+                    ScreenItemID = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ItemType",
                 columns: table => new
                 {
@@ -169,6 +185,7 @@ namespace BrowserAdventures.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemTypeID = table.Column<int>(nullable: false),
                     ItemName = table.Column<string>(nullable: true),
+                    ItemDescription = table.Column<string>(nullable: true),
                     Container = table.Column<bool>(nullable: false),
                     UserID = table.Column<int>(nullable: true)
                 },
@@ -181,28 +198,6 @@ namespace BrowserAdventures.Migrations
                         principalTable: "User",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InventoryItems",
-                columns: table => new
-                {
-                    InventoryItemID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false),
-                    ItemID = table.Column<int>(nullable: false),
-                    ScreenItemID = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
-                    table.ForeignKey(
-                        name: "FK_InventoryItems_Item_ItemID",
-                        column: x => x.ItemID,
-                        principalTable: "Item",
-                        principalColumn: "ItemID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -233,11 +228,6 @@ namespace BrowserAdventures.Migrations
                         principalColumn: "ScreenID",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_InventoryItems_ItemID",
-                table: "InventoryItems",
-                column: "ItemID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Item_UserID",

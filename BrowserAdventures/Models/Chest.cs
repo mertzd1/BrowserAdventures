@@ -8,7 +8,13 @@ namespace BrowserAdventures.Models
 {
     public class Chest
     {
-        public Item Item { get; set; }
-        public int ItemID { get; set; }
+
+        public Chest()
+        {
+            ItemsInside = new Dictionary<int, Item>();
+        }
+        public Dictionary<int, Item> ItemsInside { get; set; }
+        public Item ParentContainer { get; set; }
+        
     }
 }

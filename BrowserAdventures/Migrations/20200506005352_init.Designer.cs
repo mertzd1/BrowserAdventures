@@ -10,7 +10,7 @@ using browsersqlserver.database.windows;
 namespace BrowserAdventures.Migrations
 {
     [DbContext(typeof(BrowserAdventureContext))]
-    [Migration("20200505161426_init")]
+    [Migration("20200506005352_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,8 +162,6 @@ namespace BrowserAdventures.Migrations
 
                     b.HasKey("InventoryItemID");
 
-                    b.HasIndex("ItemID");
-
                     b.ToTable("InventoryItems");
                 });
 
@@ -176,6 +174,9 @@ namespace BrowserAdventures.Migrations
 
                     b.Property<bool>("Container")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ItemDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ItemName")
                         .HasColumnType("nvarchar(max)");
@@ -327,15 +328,6 @@ namespace BrowserAdventures.Migrations
                     b.HasKey("WeaponID");
 
                     b.ToTable("Weapon");
-                });
-
-            modelBuilder.Entity("BrowserAdventures.Models.InventoryItem", b =>
-                {
-                    b.HasOne("BrowserAdventures.Models.Item", null)
-                        .WithMany("ContainerInventory")
-                        .HasForeignKey("ItemID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BrowserAdventures.Models.Item", b =>

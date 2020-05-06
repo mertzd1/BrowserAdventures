@@ -5,12 +5,13 @@
 
 <h1>Console</h1>
 
-Hi, @Model.User.Name
+
 <div class="console-container olde-font">
     <div class="log-events d-flex flex-column">
         @foreach (FightLog entry in Model.Log)
         {
             <span class="mt-2">@entry.Entry</span>
+            <span class="mt-2 text-center font-weight-bold">. . .</span>
         }
     </div>
     <div class="screen-options mt-2 d-flex flex-column">
@@ -27,4 +28,8 @@ Hi, @Model.User.Name
         }
     </div>
 </div>
+
+<script>
+window.scrollTo(0, document.body.clientHeight);
+</script>
 
