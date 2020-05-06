@@ -10,20 +10,38 @@
     <div class="log-events d-flex flex-column">
         @foreach (FightLog entry in Model.Log)
         {
-            <span class="mt-2">@entry.Entry</span>
             <span class="mt-2 text-center font-weight-bold">. . .</span>
+            <p class="mt-2 @entry.EntryType">@Html.Raw(entry.Entry)</p>
         }
     </div>
     <div class="screen-options mt-2 d-flex flex-column">
+        @if (Model.Screen.ScreenEnemies != null)
+        {
+            foreach (ScreenEnemy e in Model.Screen.ScreenEnemies)
+            {
+                if (Model.User.WeaponEquipped) {
+                    Item weapon = new Item();
+                    foreach (Item item in Model.User.Inventory)
+                    {
+                        if (item.ItemID == Model.User.WeaponID) weapon = item;
+                    }
+                    @Html.ActionLink(e.ScreenEnemyAction + $" with your {weapon.ItemName}", "Attack", new { screenEnemyID = e.ScreenEnemyID })
+                } else
+                {
+                    <span>You can't attack without a weapon.</span>
+                }
+            }
+        }
         @foreach (AccessPoint p in Model.AccessPoints)
         {
             @Html.ActionLink(p.Description, "Travel", new { screenID = p.To })
         }
+
         @if (Model.Screen.ScreenInventory != null)
         {
             foreach (ScreenItem s in Model.Screen.ScreenInventory)
             {
-                @Html.ActionLink(s.ScreenItemAction, s.Item.Container ? "Open" : "Take", new { itemID = s.ItemID })
+                @Html.ActionLink(s.ScreenItemAction, s.Item.Container ? "Open" : "Take", new { inventoryItemID = 0, itemID = s.ItemID, chestID = 0 })
             }
         }
     </div>

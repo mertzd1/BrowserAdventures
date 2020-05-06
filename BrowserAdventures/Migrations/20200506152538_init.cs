@@ -79,7 +79,8 @@ namespace BrowserAdventures.Migrations
                     UserID = table.Column<int>(nullable: false),
                     ScreenEnemyID = table.Column<int>(nullable: false),
                     DamageDone = table.Column<int>(nullable: false),
-                    Entry = table.Column<string>(nullable: true)
+                    Entry = table.Column<string>(nullable: true),
+                    EntryType = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,21 +131,6 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScreenEnemy",
-                columns: table => new
-                {
-                    ScreenEnemyID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ScreenID = table.Column<int>(nullable: false),
-                    EnemyID = table.Column<int>(nullable: false),
-                    ScreenEnemyAction = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ScreenEnemy", x => x.ScreenEnemyID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -154,7 +140,9 @@ namespace BrowserAdventures.Migrations
                     Screen = table.Column<int>(nullable: false),
                     Level = table.Column<int>(nullable: false),
                     Experience = table.Column<int>(nullable: false),
-                    Health = table.Column<int>(nullable: false)
+                    Health = table.Column<int>(nullable: false),
+                    WeaponEquipped = table.Column<bool>(nullable: false),
+                    WeaponID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -162,7 +150,7 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Weapon",
+                name: "Weapons",
                 columns: table => new
                 {
                     WeaponID = table.Column<int>(nullable: false)
@@ -174,7 +162,29 @@ namespace BrowserAdventures.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weapon", x => x.WeaponID);
+                    table.PrimaryKey("PK_Weapons", x => x.WeaponID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ScreenEnemy",
+                columns: table => new
+                {
+                    ScreenEnemyID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ScreenID = table.Column<int>(nullable: false),
+                    EnemyID = table.Column<int>(nullable: false),
+                    ScreenEnemyAction = table.Column<string>(nullable: true),
+                    EnemyDescription = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScreenEnemy", x => x.ScreenEnemyID);
+                    table.ForeignKey(
+                        name: "FK_ScreenEnemy_Screen_ScreenID",
+                        column: x => x.ScreenID,
+                        principalTable: "Screen",
+                        principalColumn: "ScreenID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,6 +245,11 @@ namespace BrowserAdventures.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ScreenEnemy_ScreenID",
+                table: "ScreenEnemy",
+                column: "ScreenID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScreenItem_ItemID",
                 table: "ScreenItem",
                 column: "ItemID");
@@ -275,7 +290,7 @@ namespace BrowserAdventures.Migrations
                 name: "ScreenItem");
 
             migrationBuilder.DropTable(
-                name: "Weapon");
+                name: "Weapons");
 
             migrationBuilder.DropTable(
                 name: "Item");

@@ -128,6 +128,9 @@ namespace BrowserAdventures.Migrations
                     b.Property<string>("Entry")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EntryType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ScreenEnemyID")
                         .HasColumnType("int");
 
@@ -232,6 +235,9 @@ namespace BrowserAdventures.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("EnemyDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EnemyID")
                         .HasColumnType("int");
 
@@ -242,6 +248,8 @@ namespace BrowserAdventures.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScreenEnemyID");
+
+                    b.HasIndex("ScreenID");
 
                     b.ToTable("ScreenEnemy");
                 });
@@ -299,6 +307,12 @@ namespace BrowserAdventures.Migrations
                     b.Property<int>("Screen")
                         .HasColumnType("int");
 
+                    b.Property<bool>("WeaponEquipped")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("WeaponID")
+                        .HasColumnType("int");
+
                     b.HasKey("UserID");
 
                     b.ToTable("User");
@@ -325,7 +339,7 @@ namespace BrowserAdventures.Migrations
 
                     b.HasKey("WeaponID");
 
-                    b.ToTable("Weapon");
+                    b.ToTable("Weapons");
                 });
 
             modelBuilder.Entity("BrowserAdventures.Models.Item", b =>
@@ -333,6 +347,15 @@ namespace BrowserAdventures.Migrations
                     b.HasOne("BrowserAdventures.Models.User", null)
                         .WithMany("Inventory")
                         .HasForeignKey("UserID");
+                });
+
+            modelBuilder.Entity("BrowserAdventures.Models.ScreenEnemy", b =>
+                {
+                    b.HasOne("BrowserAdventures.Models.Screen", null)
+                        .WithMany("ScreenEnemies")
+                        .HasForeignKey("ScreenID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BrowserAdventures.Models.ScreenItem", b =>

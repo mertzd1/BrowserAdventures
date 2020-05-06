@@ -12,6 +12,7 @@ namespace BrowserAdventures.Models
         public string ScreenDescription { get; set; }
 
         public ICollection<ScreenItem> ScreenInventory { get; set; }
+        public ICollection<ScreenEnemy> ScreenEnemies { get; set; }
 
     }
 }

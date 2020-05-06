@@ -9,15 +9,16 @@
     <div class="log-events d-flex flex-column">
         @foreach (FightLog entry in Model.Log)
         {
-            <span class="mt-2">@entry.Entry</span>
             <span class="mt-2 text-center font-weight-bold">. . .</span>
-        }
+            <span class="mt-2">@Html.Raw(entry.Entry)</span>
+            
+           }
     </div>
     <div class="screen-options mt-2 d-flex flex-column">
         @if(Model.Chest.ItemsInside != null) { 
         @foreach (KeyValuePair<int, Item> item in Model.Chest.ItemsInside)
         {
-            @Html.ActionLink($"Take the {item.Value.ItemName}", "Take", new { inventoryItemID = item.Key, takenItemID = item.Value.ItemID, chestID = Model.Chest.ParentContainer.ItemID})
+            @Html.ActionLink($"Take the {item.Value.ItemName}", "Take", new { inventoryItemID = item.Key, itemID = item.Value.ItemID, chestID = Model.Chest.ParentContainer.ItemID})
         }
         }
         @Html.ActionLink($"Close the {Model.Chest.ParentContainer.ItemName}", "Close", Model)

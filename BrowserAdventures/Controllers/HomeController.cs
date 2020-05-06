@@ -52,7 +52,7 @@ namespace BrowserAdventures.Controllers
                 
                 _context.SaveChanges();
                 verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
-                _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world." });
+                _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world.", EntryType = "normal-event" });
                 _context.SaveChanges();
                 
             }
@@ -77,13 +77,18 @@ namespace BrowserAdventures.Controllers
         public void UpdateScreen(User user)
         {
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            screen.ScreenEnemies = _context.ScreenEnemy.Where(se => se.ScreenID == screen.ScreenID).ToList();
             string roomDesc = screen.ScreenDescription;
             foreach (ScreenItem item in screen.ScreenInventory)
             {
                 roomDesc += " " + item.ScreenItemDescription;
             }
+            foreach (ScreenEnemy enemy in screen.ScreenEnemies)
+            {
+                roomDesc += " " + enemy.EnemyDescription;
+            }
             // TODO: Add enemy description to room description
-            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = roomDesc });
+            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = roomDesc, EntryType = "normal-event" });
             _context.SaveChanges();
         }
 
@@ -91,6 +96,31 @@ namespace BrowserAdventures.Controllers
         {
             User user = GetUser();
             // Update the screen the user is currently at
+            AccessPoint ap = _context.AccessPoint.Where(a => a.To == screenID && a.From == user.Screen).FirstOrDefault();
+            AccessRequirements ar = _context.AccessRequirements.Where(a => a.AccessPointID == ap.AccessPointID).FirstOrDefault();
+            bool requirementMet = false;
+            if (ar != null)
+            {
+                foreach (Item item in user.Inventory)
+                {
+                    if (item.ItemID == ar.RequiredItemID) requirementMet = true;
+                }
+            } else
+            {
+                requirementMet = true;
+            }
+
+            if (requirementMet && ar != null)
+            {
+                _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = ar.OpenMessage, EntryType = "normal-event" });
+            } else if (!requirementMet && ar != null)
+            {
+                _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = ar.ClosedMessage, EntryType = "normal-event" });
+                UpdateScreen(user);
+                _context.SaveChanges();
+                return View("Console", BuildModel());
+
+            }
             user.Screen = screenID;
             UpdateScreen(user);
             SaveUser(user);
@@ -109,6 +139,55 @@ namespace BrowserAdventures.Controllers
             model.Screen = screen;
 
 
+            return View("Console", BuildModel());
+        }
+
+        public IActionResult Attack(int screenEnemyID)
+        {
+            // Roll enemy damage
+            // I want the enemy to attack first so you dont kill it before it gets a chance to hit you
+            ScreenEnemy screenEnemy = _context.ScreenEnemy.Where(se => se.ScreenEnemyID == screenEnemyID).FirstOrDefault();
+            Enemy enemy = _context.Enemy.Where(e => e.EnemyID == screenEnemy.EnemyID).FirstOrDefault();
+            int enemyDamage = enemy.EnemyModifier;
+            Random rand = new Random();
+            for (int r = 0; r < enemy.EnemyMultipler; r++)
+            {
+                enemyDamage += rand.Next(1, enemy.EnemyDie + 1);
+            }
+            User user = GetUser();
+            user.Health -= enemyDamage;
+            string fight = $"A {enemy.EnemyName} attacks you, doing {enemyDamage} HP damage.<br />";
+
+            // Roll player damage
+            Item weapon = new Item();
+            foreach (Item item in user.Inventory)
+            {
+                if (item.ItemID == user.WeaponID) weapon = item;
+            }
+            Weapon sickle = _context.Weapons.Where(w => w.ItemID == weapon.ItemID).FirstOrDefault();
+            // For now, just using static numbers to get combat to display properly
+            int userDamage = sickle.WeaponModifier;
+            for (int r = 0; r < sickle.WeaponMultipler; r++)
+            {
+                userDamage += rand.Next(1, sickle.WeaponDie + 1);
+            }
+
+            fight += $"You attack a {enemy.EnemyName} with your {weapon.ItemName} for {userDamage} HP damage.<br />";
+            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = fight, EntryType = "combat" });
+            enemy.EnemyHealth -= userDamage;
+            if (enemy.EnemyHealth <= 0)
+            {
+                string exp = $"You killed a {enemy.EnemyName}! You gained {enemy.EnemyExperience} experience points.";
+                user.Experience += enemy.EnemyExperience;
+                _context.Enemy.Remove(enemy);
+                _context.ScreenEnemy.Remove(screenEnemy);
+                _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = exp, EntryType = "experience" });
+            }
+
+            
+            _context.SaveChanges();
+
+            UpdateScreen(user);
             return View("Console", BuildModel());
         }
 
@@ -160,29 +239,63 @@ namespace BrowserAdventures.Controllers
             return View("Console", BuildModel());
         }
 
-        public IActionResult Take(int inventoryItemID, int takenItemID, int chestID)
+        public IActionResult Take(int inventoryItemID, int itemID, int chestID)
         {
             // TODO: Actions taken when taking
             User user = GetUser();
-            Item takenItem = _context.Item.Where(i => i.ItemID == takenItemID).FirstOrDefault();
+            Item takenItem = _context.Item.Where(i => i.ItemID == itemID).FirstOrDefault();
             InventoryItem inv = new InventoryItem();
-            inv.InventoryItemID = inventoryItemID;
-            inv.ItemID = takenItemID;
-            inv.UserID = user.UserID;
-            inv.Quantity = 1;
-            _context.InventoryItems.Update(inv);
-            FightLog f = new FightLog { UserID = user.UserID, Entry = $"You added the {takenItem.ItemName} to your inventory." };
+            if (inventoryItemID == 0)
+            {
+                inv.ItemID = itemID;
+                inv.UserID = user.UserID;
+                inv.Quantity = 1;
+                _context.InventoryItems.Add(inv);
+                ScreenItem se = _context.ScreenItem.Where(s => s.ScreenID == user.Screen && s.ItemID == itemID).FirstOrDefault();
+                _context.ScreenItem.Remove(se);
+            } else { 
+                inv.InventoryItemID = inventoryItemID;
+                inv.ItemID = itemID;
+                inv.UserID = user.UserID;
+                inv.Quantity = 1;
+                _context.InventoryItems.Update(inv);
+            }
+            user.Inventory.Add(takenItem);
+            ItemType type = _context.ItemType.Where(t => t.ItemTypeID == takenItem.ItemTypeID).FirstOrDefault();
+            if (type.ItemTypeName == "Weapon")
+            {
+                user.WeaponEquipped = true;
+                user.WeaponID = takenItem.ItemID;
+            }
+            SaveUser(user);
+            FightLog f = new FightLog { UserID = user.UserID, Entry = $"You added the {takenItem.ItemName} to your inventory.", EntryType = "normal-event" };
             _context.FightLogs.Add(f);
             _context.SaveChanges();
-            BuildOpenViewDescription(chestID);
+            if (chestID == 0)
+            {
+                UpdateScreen(user);
+                return View("Console", BuildModel());
+            } else { 
+                BuildOpenViewDescription(chestID);
             
-            return View("Open", BuildModel());
+                return View("Open", BuildModel());
+            }
         }
 
         public ConsoleViewModel BuildModel()
         {
             User user = GetUser();
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
+            
+            /*
+            List<InventoryItem> inventory = _context.InventoryItems.Where(inv => inv.UserID == user.UserID).ToList();
+            foreach (InventoryItem invItem in inventory)
+            {
+                user.Inventory.Add(_context.Item.Where(i => i.ItemID == invItem.ItemID).FirstOrDefault());
+            }
+            SaveUser(user);
+            */
+
             Chest chest = new Chest();
             foreach (ScreenItem si in screen.ScreenInventory)
             {
@@ -235,7 +348,7 @@ namespace BrowserAdventures.Controllers
                 }
             }
             // TODO: Append items in container to description
-            FightLog f = new FightLog { UserID = user.UserID, Entry = openDesc };
+            FightLog f = new FightLog { UserID = user.UserID, Entry = openDesc, EntryType = "normal-event" };
             _context.FightLogs.Add(f);
             _context.SaveChanges();
         }

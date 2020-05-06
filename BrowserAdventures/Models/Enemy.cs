@@ -15,5 +15,7 @@ namespace BrowserAdventures.Models
         public int EnemyDie { get; set; }
         public int EnemyModifier { get; set; }
         public int EnemyExperience { get; set; }
+
+        
     }
 }

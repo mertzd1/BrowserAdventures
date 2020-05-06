@@ -32,6 +32,6 @@ namespace browsersqlserver.database.windows
         public DbSet<Enemy> Enemy { get; set; }
 
         public DbSet<ScreenEnemy> ScreenEnemy { get; set; }
-        public DbSet<Weapon> Weapon { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
     }
 }

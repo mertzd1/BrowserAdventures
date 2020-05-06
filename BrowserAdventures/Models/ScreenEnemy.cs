@@ -11,6 +11,7 @@ namespace BrowserAdventures.Models
         public int ScreenID { get; set; }
         public int EnemyID { get; set; }
         public string ScreenEnemyAction { get; set; }
+        public string EnemyDescription { get; set; }
 
     }
 }

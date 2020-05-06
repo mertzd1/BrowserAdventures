@@ -7,6 +7,10 @@ namespace BrowserAdventures.Models
 {
     public class User
     {
+        public User()
+        {
+            Inventory = new List<Item>();
+        }
         public int UserID { get; set; }
 
         public string Name { get; set; }
@@ -14,8 +18,10 @@ namespace BrowserAdventures.Models
         public int Level { get; set; }
         public int Experience { get; set; }
         public int Health { get; set; }
+        public bool WeaponEquipped { get; set; }
+        public int WeaponID { get; set; }
 
-        public ICollection<Item> Inventory { get; set; }
+        public List<Item> Inventory { get; set; }
 
     }
 }
