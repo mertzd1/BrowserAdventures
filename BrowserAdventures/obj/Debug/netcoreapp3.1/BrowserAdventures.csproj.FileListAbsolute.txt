@@ -407,3 +407,4 @@ C:\Users\James\Source\Repos\BrowserAdventures\BrowserAdventures\obj\Debug\netcor
 C:\Users\James\Source\Repos\BrowserAdventures\BrowserAdventures\obj\Debug\netcoreapp3.1\BrowserAdventures.pdb
 C:\Users\James\Source\Repos\BrowserAdventures\BrowserAdventures\obj\Debug\netcoreapp3.1\BrowserAdventures.genruntimeconfig.cache
 C:\Users\James\Source\Repos\BrowserAdventures\BrowserAdventures\obj\Debug\netcoreapp3.1\Razor\Views\Home\Open.cshtml.g.cs
+C:\Users\James\Source\Repos\BrowserAdventures\BrowserAdventures\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Inventory.cshtml.g.cs

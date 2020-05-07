@@ -110,6 +110,11 @@ namespace BrowserAdventures.Models
                         {
                             // ItemTypeID = 3,
                             ItemTypeName = "Weapon"
+                        },
+                        new ItemType
+                        {
+                            // ItemTypeID = 4,
+                            ItemTypeName = "Consumable"
                         }
                         );
                     context.SaveChanges();
@@ -166,7 +171,32 @@ namespace BrowserAdventures.Models
                         }
                         );
                     context.SaveChanges();
+                    context.Item.Add(
+                        new Item
+                        {
+                            // ItemID = 4,
+                            ItemTypeID = 4,
+                            ItemName = "Apple",
+                            ItemDescription = "A juicy, red apple.",
+                            Container = false
+                        }
+                        );
+                    context.SaveChanges();
 
+                }
+
+                // Consumables
+                if (!context.Consumables.Any())
+                {
+                    context.Consumables.Add(
+                        new Consumable
+                        {
+                            // ConsumableID = 1,
+                            ItemID = 4,
+                            Heals = 10
+                        }
+                        );
+                    context.SaveChanges();
                 }
                 
                 // Screen Items
@@ -201,7 +231,7 @@ namespace BrowserAdventures.Models
                 //InventoryItems
                if (!context.InventoryItems.Any())
                 {
-                    context.InventoryItems.AddRange(
+                    context.InventoryItems.Add(
                         new InventoryItem
                         {
                             //InventoryItemID = 1,
@@ -210,6 +240,7 @@ namespace BrowserAdventures.Models
                         }
                         );
                     context.SaveChanges();
+                    
                 }
                 
                 // Enemies

@@ -61,6 +61,15 @@ input {
     padding: 20px;
     background: white;
     border-radius: 30px;
+    background-image: url("../img/scrollBackground.png");
+}
+
+.form-container label {
+    font-size: 1.1em;
+}
+
+.form-container .text-field {
+    background-color: rgba(0,0,0,0);
 }
 
 .console-container {
@@ -69,7 +78,65 @@ input {
     font-size: 2em;
     background-color: rgba(255,255,255,.3);
     border-radius: 50px;
+    background-image: url("../img/scrollBackground.png");
 }
+
+.inv-view {
+    position: fixed;
+    left: 5%;
+    top: 10%;
+    background-color: black;
+    width: 20%;
+    background-image: url("../img/scrollBackground.png");
+    border-radius: 20px;
+}
+.stats-container {
+    justify-content: space-between;
+    align-items: flex-start;
+    color: black;
+}
+
+.stats-char {
+    padding: 20px 40px;
+    font-size: 1.3em;
+}
+.stats-name {
+    font-size: 3em;
+}
+.stats-hp {
+    font-size: 2em;
+}
+.stats-exp {
+    font-size: 1.5em;
+}
+.stats-level {
+    background-color: black;
+    color: gold;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 20px;
+    font-size: 3em;
+    width: 20%;
+    text-align: center;
+}
+
+.inv-title {
+    font-size: 2em;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.inv-items {
+    padding-left: 30px;
+    padding-bottom: 50px;
+
+}
+
+.inv-item {
+    font-size: 1.5em;
+}
+
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -108,7 +175,8 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
-  background-image: url("../img/scrollBackground.png");
+  background-color: rgb(30,30,30);
+  
 }
 .footer {
   position: absolute;

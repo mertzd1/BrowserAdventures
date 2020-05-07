@@ -48,13 +48,24 @@ namespace BrowserAdventures.Controllers
                 user.Level = 1;
                 user.Experience = 0;
                 user.Screen = 1;
+                Item item = _context.Item.Where(i => i.ItemName == "Apple").Single();
+                user.Inventory.Add(item);
+                
                 _context.User.Add(user);
                 
                 _context.SaveChanges();
                 verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
+                _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID });
                 _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world.", EntryType = "normal-event" });
                 _context.SaveChanges();
                 
+            } else
+            {
+                List<InventoryItem> invItems = _context.InventoryItems.Where(ii => ii.UserID == user.UserID).ToList();
+                foreach (InventoryItem item in invItems)
+                {
+                    verifiedUser.Inventory.Add(_context.Item.Where(i => i.ItemID == item.ItemID).FirstOrDefault());
+                }
             }
             UpdateScreen(verifiedUser);
             SaveUser(verifiedUser);
@@ -95,6 +106,7 @@ namespace BrowserAdventures.Controllers
         public IActionResult Travel(int screenID)
         {
             User user = GetUser();
+
             // Update the screen the user is currently at
             AccessPoint ap = _context.AccessPoint.Where(a => a.To == screenID && a.From == user.Screen).FirstOrDefault();
             AccessRequirements ar = _context.AccessRequirements.Where(a => a.AccessPointID == ap.AccessPointID).FirstOrDefault();
@@ -155,6 +167,7 @@ namespace BrowserAdventures.Controllers
                 enemyDamage += rand.Next(1, enemy.EnemyDie + 1);
             }
             User user = GetUser();
+
             user.Health -= enemyDamage;
             string fight = $"A {enemy.EnemyName} attacks you, doing {enemyDamage} HP damage.<br />";
 
@@ -179,12 +192,12 @@ namespace BrowserAdventures.Controllers
             {
                 string exp = $"You killed a {enemy.EnemyName}! You gained {enemy.EnemyExperience} experience points.";
                 user.Experience += enemy.EnemyExperience;
-                _context.Enemy.Remove(enemy);
                 _context.ScreenEnemy.Remove(screenEnemy);
                 _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = exp, EntryType = "experience" });
             }
 
-            
+            _context.User.Update(user);
+            SaveUser(user);
             _context.SaveChanges();
 
             UpdateScreen(user);
@@ -243,6 +256,7 @@ namespace BrowserAdventures.Controllers
         {
             // TODO: Actions taken when taking
             User user = GetUser();
+
             Item takenItem = _context.Item.Where(i => i.ItemID == itemID).FirstOrDefault();
             InventoryItem inv = new InventoryItem();
             if (inventoryItemID == 0)
@@ -270,6 +284,7 @@ namespace BrowserAdventures.Controllers
             SaveUser(user);
             FightLog f = new FightLog { UserID = user.UserID, Entry = $"You added the {takenItem.ItemName} to your inventory.", EntryType = "normal-event" };
             _context.FightLogs.Add(f);
+            _context.User.Update(user);
             _context.SaveChanges();
             if (chestID == 0)
             {
@@ -285,6 +300,15 @@ namespace BrowserAdventures.Controllers
         public ConsoleViewModel BuildModel()
         {
             User user = GetUser();
+            /*
+            if (user.Inventory.Count == 0) { 
+            List<InventoryItem> invItems = _context.InventoryItems.Where(ii => ii.UserID == user.UserID).ToList();
+            foreach (InventoryItem item in invItems)
+            {
+                user.Inventory.Add(_context.Item.Where(i => i.ItemID == item.ItemID).FirstOrDefault());
+            }
+            }
+            */
             Screen screen = _context.Screen.Include(s => s.ScreenInventory).Where(s => s.ScreenID == user.Screen).FirstOrDefault();
             
             /*
@@ -362,6 +386,20 @@ namespace BrowserAdventures.Controllers
         {
             User user = HttpContext.Session.GetJson<User>("User") ?? new User();
             return user;
+        }
+
+        private bool ResetGameState()
+        {
+            try
+            {
+                // if successful
+                return true;
+            }
+            catch
+            {
+                // otherwise
+                return false;
+            }
         }
     }
 }
