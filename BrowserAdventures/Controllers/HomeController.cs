@@ -41,7 +41,7 @@ namespace BrowserAdventures.Controllers
         }
         public IActionResult Login(User user)
         {
-            User verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
+            User verifiedUser = _context.User.Include(u => u.InventoryItems).Where(u => u.Name == user.Name).FirstOrDefault();
             if (verifiedUser == null)
             {
                 user.Health = 30;
@@ -55,7 +55,7 @@ namespace BrowserAdventures.Controllers
                 
                 _context.SaveChanges();
                 verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
-                _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID, Quantity = 1 });
+                _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID, Quantity = 2 });
                 _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world.", EntryType = "normal-event" });
                 _context.SaveChanges();
                 
@@ -306,13 +306,42 @@ namespace BrowserAdventures.Controllers
             user.Health = Math.Min(user.Health + consumable.Heals, maxHP);
             InventoryItem invItem = _context.InventoryItems.Where(ii => ii.UserID == user.UserID && ii.ItemID == item.ItemID).SingleOrDefault();
             invItem.Quantity -= 1;
-            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = consumable.ConsumeMessage, EntryType = "consume" });
             if (invItem.Quantity == 0)
             {
                 _context.InventoryItems.Remove(invItem);
-                user.Inventory.Remove(item);
-                
+            } else
+            {
+                _context.InventoryItems.Update(invItem);
             }
+            foreach (InventoryItem iItem in user.InventoryItems)
+            {
+                if (iItem.InventoryItemID == invItem.InventoryItemID)
+                {
+                    iItem.Quantity -= 1;
+                    if (iItem.Quantity == 0) {
+                        Item removedItem = null;
+                        foreach (Item i in user.Inventory)
+                        {
+                            if (i.ItemID == iItem.ItemID) removedItem = i;
+                        }
+                        user.Inventory.Remove(removedItem);
+                        invItem = iItem;
+                        
+                    }
+                }
+            }
+            if (invItem.Quantity == 0) user.InventoryItems.Remove(invItem);
+            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = consumable.ConsumeMessage, EntryType = "consume" });
+            
+            /*
+            if (invItem.Quantity == 0)
+            {
+                _context.InventoryItems.Remove(invItem);
+                user.InventoryItems.Remove(invItem);
+                user.Inventory.Remove(item);
+
+            }
+            */
             _context.SaveChanges();
             SaveUser(user);
             return RedirectToAction("Close", BuildModel());

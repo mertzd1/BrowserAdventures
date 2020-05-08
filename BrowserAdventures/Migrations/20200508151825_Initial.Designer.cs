@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using browsersqlserver.database.windows;
 
 namespace BrowserAdventures.Migrations
 {
     [DbContext(typeof(BrowserAdventureContext))]
-    partial class BrowserAdventureContextModelSnapshot : ModelSnapshot
+    [Migration("20200508151825_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -161,7 +163,7 @@ namespace BrowserAdventures.Migrations
                     b.Property<int>("ScreenItemID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("InventoryItemID");
@@ -359,7 +361,9 @@ namespace BrowserAdventures.Migrations
 
                     b.HasOne("BrowserAdventures.Models.User", null)
                         .WithMany("InventoryItems")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BrowserAdventures.Models.Item", b =>

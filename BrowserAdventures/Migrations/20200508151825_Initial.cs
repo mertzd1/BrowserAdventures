@@ -2,7 +2,7 @@
 
 namespace BrowserAdventures.Migrations
 {
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -86,22 +86,6 @@ namespace BrowserAdventures.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FightLogs", x => x.FightLogID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InventoryItems",
-                columns: table => new
-                {
-                    InventoryItemID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false),
-                    ItemID = table.Column<int>(nullable: false),
-                    ScreenItemID = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,6 +196,34 @@ namespace BrowserAdventures.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InventoryItems",
+                columns: table => new
+                {
+                    InventoryItemID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(nullable: false),
+                    ItemID = table.Column<int>(nullable: false),
+                    ScreenItemID = table.Column<int>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItems", x => x.InventoryItemID);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_Item_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Item",
+                        principalColumn: "ItemID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryItems_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScreenItem",
                 columns: table => new
                 {
@@ -239,6 +251,16 @@ namespace BrowserAdventures.Migrations
                         principalColumn: "ScreenID",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_ItemID",
+                table: "InventoryItems",
+                column: "ItemID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItems_UserID",
+                table: "InventoryItems",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Item_UserID",

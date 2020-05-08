@@ -21,6 +21,8 @@ namespace BrowserAdventures.Models
         public bool WeaponEquipped { get; set; }
         public int WeaponID { get; set; }
 
+        public ICollection<InventoryItem> InventoryItems { get; set; }
+
         public List<Item> Inventory { get; set; }
 
     }
