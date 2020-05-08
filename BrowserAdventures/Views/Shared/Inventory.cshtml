@@ -20,7 +20,12 @@
             @foreach (Item item in Model.User.Inventory)
             {
                 // TODO: If consumable (ItemType == 4), create action link
+                @if (item.ItemTypeID == 4)
+                {
+                    <span class="inv-item">@Html.ActionLink(item.ItemName, "Eat", item)</span>
+                } else { 
                 <span class="inv-item">@item.ItemName</span>
+                }
             }
         </div>
     </div>

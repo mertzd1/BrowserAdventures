@@ -44,7 +44,8 @@ namespace BrowserAdventures.Migrations
                     ConsumableID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemID = table.Column<int>(nullable: false),
-                    Heals = table.Column<int>(nullable: false)
+                    Heals = table.Column<int>(nullable: false),
+                    ConsumeMessage = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

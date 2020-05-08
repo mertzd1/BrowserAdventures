@@ -71,6 +71,9 @@ namespace BrowserAdventures.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ConsumeMessage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Heals")
                         .HasColumnType("int");
 

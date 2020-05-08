@@ -47,8 +47,32 @@
     </div>
 </div>
 
-<div class="inv-view">
-    <partial name="Inventory" />
+<div class="inv-view d-flex flex-column olde-font">
+    <div class="stats-container d-flex">
+        <div class="stats-char d-flex flex-column">
+            <span class="stats-name">@Model.User.Name</span>
+            <span class="stats-hp">HP: @Model.User.Health</span>
+            <span class="stats-exp">Exp: @Model.User.Experience</span>
+        </div>
+        <div class="stats-level">
+            @Model.User.Level
+        </div>
+    </div>
+    <span class="inv-title">Inventory:</span>
+    <div class="inv-items d-flex flex-column">
+        @foreach (Item item in Model.User.Inventory)
+        {
+            // TODO: If consumable (ItemType == 4), create action link
+            @if (item.ItemTypeID == 4)
+            {
+                <span class="inv-item">@Html.ActionLink(item.ItemName, "Eat", item)</span>
+            }
+            else
+            {
+                <span class="inv-item">@item.ItemName</span>
+            }
+        }
+    </div>
 </div>
 
 <script>

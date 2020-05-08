@@ -55,16 +55,17 @@ namespace BrowserAdventures.Controllers
                 
                 _context.SaveChanges();
                 verifiedUser = _context.User.Where(u => u.Name == user.Name).FirstOrDefault();
-                _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID });
+                _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID, Quantity = 1 });
                 _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world.", EntryType = "normal-event" });
                 _context.SaveChanges();
                 
             } else
             {
-                List<InventoryItem> invItems = _context.InventoryItems.Where(ii => ii.UserID == user.UserID).ToList();
+                List<InventoryItem> invItems = _context.InventoryItems.Where(ii => ii.UserID == verifiedUser.UserID).ToList();
                 foreach (InventoryItem item in invItems)
                 {
-                    verifiedUser.Inventory.Add(_context.Item.Where(i => i.ItemID == item.ItemID).FirstOrDefault());
+                    Item itemToAdd = _context.Item.Where(i => i.ItemID == item.ItemID).FirstOrDefault();
+                    //verifiedUser.Inventory.Add(itemToAdd);
                 }
             }
             UpdateScreen(verifiedUser);
@@ -295,6 +296,26 @@ namespace BrowserAdventures.Controllers
             
                 return View("Open", BuildModel());
             }
+        }
+
+        public IActionResult Eat(Item item)
+        {
+            User user = GetUser();
+            int maxHP = user.Level * 30;
+            Consumable consumable = _context.Consumables.Where(c => c.ItemID == item.ItemID).SingleOrDefault();
+            user.Health = Math.Min(user.Health + consumable.Heals, maxHP);
+            InventoryItem invItem = _context.InventoryItems.Where(ii => ii.UserID == user.UserID && ii.ItemID == item.ItemID).SingleOrDefault();
+            invItem.Quantity -= 1;
+            _context.FightLogs.Add(new FightLog { UserID = user.UserID, Entry = consumable.ConsumeMessage, EntryType = "consume" });
+            if (invItem.Quantity == 0)
+            {
+                _context.InventoryItems.Remove(invItem);
+                user.Inventory.Remove(item);
+                
+            }
+            _context.SaveChanges();
+            SaveUser(user);
+            return RedirectToAction("Close", BuildModel());
         }
 
         public ConsoleViewModel BuildModel()

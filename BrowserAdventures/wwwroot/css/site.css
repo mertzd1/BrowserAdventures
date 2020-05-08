@@ -36,10 +36,19 @@ a {
 }
 
 .combat {
-    color: darkred !important;
+    background-color: rgba(30,30,30,.7);
+    color: orangered !important;
+    padding: 20px;
+    border-radius: 10px;
 }
 .experience {
-    color: darkgoldenrod !important;
+    background-color: rgba(30,30,30,.7);
+    color: gold !important;
+    padding: 20px;
+    border-radius: 10px;
+}
+.consume {
+    color: lightseagreen;
 }
 
 input {

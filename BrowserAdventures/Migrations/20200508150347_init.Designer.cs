@@ -10,7 +10,7 @@ using browsersqlserver.database.windows;
 namespace BrowserAdventures.Migrations
 {
     [DbContext(typeof(BrowserAdventureContext))]
-    [Migration("20200506152538_init")]
+    [Migration("20200508150347_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,9 @@ namespace BrowserAdventures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConsumeMessage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Heals")
                         .HasColumnType("int");

@@ -154,7 +154,7 @@ namespace BrowserAdventures.Models
                         {
                             //ItemID = 2,
                             ItemTypeID = 2,
-                            ItemName = "gate key",
+                            ItemName = "Gate key",
                             ItemDescription = "A key sits at the bottom of the chest. It looks like it might fit a gate.",
                             Container = false
                         }
@@ -165,7 +165,7 @@ namespace BrowserAdventures.Models
                         {
                             // ItemID = 3,
                             ItemTypeID = 3,
-                            ItemName = "Rusty Sickle",
+                            ItemName = "Rusty sickle",
                             ItemDescription = "A rusty sickle, perfect for killing malnourished bandits.",
                             Container = false
                         }
@@ -193,7 +193,8 @@ namespace BrowserAdventures.Models
                         {
                             // ConsumableID = 1,
                             ItemID = 4,
-                            Heals = 10
+                            Heals = 10,
+                            ConsumeMessage = "You eat a juicy, red apple. You feel much better!"
                         }
                         );
                     context.SaveChanges();
