@@ -58,6 +58,7 @@ namespace BrowserAdventures.Controllers
                 _context.InventoryItems.Add(new InventoryItem { ItemID = item.ItemID, UserID = verifiedUser.UserID, Quantity = 2 });
                 _context.FightLogs.Add(new FightLog { UserID = verifiedUser.UserID, Entry = $"{verifiedUser.Name} steps into the world.", EntryType = "normal-event" });
                 _context.SaveChanges();
+                ResetGameState();
                 
             } else
             {
@@ -438,17 +439,31 @@ namespace BrowserAdventures.Controllers
             return user;
         }
 
-        private bool ResetGameState()
+        private void ResetGameState()
         {
-            try
+            // Add another sickle if none
+            if (!_context.ScreenItem.Where(s => s.ScreenID == 2).Any())
             {
-                // if successful
-                return true;
+                _context.ScreenItem.Add(new ScreenItem
+                {
+                    //ScreenItemID = 2,
+                    ScreenID = 2,
+                    ItemID = 3,
+                    ScreenItemDescription = "A sickle, serviceable, though lightly rusted, rests against one wall.",
+                    ScreenItemAction = "Take the sickle for protection"
+                });
+                _context.SaveChanges();
             }
-            catch
+
+            // Add another gate key
+            if (!_context.InventoryItems.Where(i => i.ScreenItemID == 1).Any())
             {
-                // otherwise
-                return false;
+                _context.InventoryItems.Add(new InventoryItem
+                {
+                    ItemID = 2,
+                    ScreenItemID = 1
+                });
+                _context.SaveChanges();
             }
         }
     }
