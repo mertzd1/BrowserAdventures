@@ -159,7 +159,7 @@ namespace BrowserAdventures.Controllers
         public IActionResult Attack(int screenEnemyID)
         {
             // Roll enemy damage
-            // I want the enemy to attack first so you dont kill it before it gets a chance to hit you
+            // I want the enemy to attack first so you dont kill it before it gets a chance to hit you.
             ScreenEnemy screenEnemy = _context.ScreenEnemy.Where(se => se.ScreenEnemyID == screenEnemyID).FirstOrDefault();
             Enemy enemy = _context.Enemy.Where(e => e.EnemyID == screenEnemy.EnemyID).FirstOrDefault();
             int enemyDamage = enemy.EnemyModifier;
